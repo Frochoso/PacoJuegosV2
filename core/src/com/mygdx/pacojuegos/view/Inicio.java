@@ -51,6 +51,7 @@ public class Inicio implements Screen {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(AssetsManager.SKIN_ATLAS));
         skin.addRegions(atlas);
 
+
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.up = skin.getDrawable("button");
         style.down = skin.getDrawable("button-down");
