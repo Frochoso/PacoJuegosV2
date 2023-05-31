@@ -1,0 +1,33 @@
+
+coche1.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+coche1
+  rotate: false
+  xy: 2, 2
+  size: 140, 40
+  orig: 140, 40
+  offset: 0, 0
+  index: -1
+coche1
+  rotate: false
+  xy: 2, 44
+  size: 140, 40
+  orig: 140, 40
+  offset: 0, 0
+  index: -1
+coche1
+  rotate: false
+  xy: 2, 86
+  size: 140, 40
+  orig: 140, 40
+  offset: 0, 0
+  index: -1
+coche1
+  rotate: false
+  xy: 144, 2
+  size: 140, 40
+  orig: 140, 40
+  offset: 0, 0
+  index: -1

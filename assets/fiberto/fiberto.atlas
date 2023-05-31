@@ -1,0 +1,26 @@
+fiberto.png
+size: 356, 960
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+fiberto
+  rotate: false
+  xy: 0, 0
+  size: 356, 320
+  orig: 356, 320
+  offset: 0, 0
+  index: -1
+fiberto
+  rotate: false
+  xy: 0, 320
+  size: 356, 320
+  orig: 356, 320
+  offset: 0, 0
+  index: -1
+fiberto
+  rotate: false
+  xy: 0, 640
+  size: 356, 320
+  orig: 356, 320
+  offset: 0, 0
+  index: -1
