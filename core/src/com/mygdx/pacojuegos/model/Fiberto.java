@@ -17,11 +17,9 @@ public class Fiberto extends Actor{
 
     private Animation<TextureRegion> skin;
     private Texture texturaMuerto;
-
     private Stage stage;
     private Rectangle hitbox;
     private boolean muerto;
-
     private float velY;
     private final float acelY;
     private float velocidadSalto = 9.0f;

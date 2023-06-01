@@ -21,8 +21,10 @@ public class AssetsManager {
     public static final String PACO_RUNNING_ATLAS_FILE = "sprites/pacoRunning/pacoRunning.atlas";
     public static final String FIBERTO_ATLAS_FILE = "fiberto\\fiberto.atlas";
     public static final String FIBERTO = "fiberto";
+    public static final String FIBERTO2 = "fiberto/fiberto2.png";
     public static final String FIBERTO_MUERTO = "fiberto\\fiberto_dead.png";
     public static final String COCHE1_ATLAS = "coches/coche1/coche1.atlas";
+    public static final String COCHETAMANO = "coches/cocheTamano.png";
     public static final String COCHE1 = "coche1";
     public static final String COCHE2_ATLAS = "coches/coche2/coche2.atlas";
     public static final String COCHE2 = "coche2";
@@ -32,8 +34,10 @@ public class AssetsManager {
     public static final String JOVANI_DCHA_ATLAS = "jovani/derecha/jovaniDcha.atlas";
     public static final String JOVANI_DCHA = "jovani_dcha";
     public static final String JOVANI_IZQDA_ATLAS = "jovani/izquierda/jovaniIzqda.atlas";
+    public static final String JOVANITAMANO = "jovani/jovaniTamano.png";
     public static final String JOVANI_IZQDA = "jovani_izqda";
     public static final String RUTA_FRUTAS = "sprites/frutas/";
+    public static final String HUEVO = "sprites/frutas/huevo.png";
     public static final String CHOCA_MANGO1 = "music/sounds/tomaMango.wav";
     public static final String CHOCA_MANGO2 = "music/sounds/everybodyWanMango.wav";
     public static final String CHOCA_MANZANA1 = "music/sounds/dimeloManzana.wav";

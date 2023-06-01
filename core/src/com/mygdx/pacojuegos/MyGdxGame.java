@@ -27,7 +27,7 @@ public class MyGdxGame extends Game {
 		myScreenManager = ScreensManager.getSingleton();
 		myGame = GameManager.getSingleton();
 		myScreen = myScreenManager.getScreen(this,ScreensManager.SCREENS.INICIO);
-		//myScreen = myScreenManager.getPantallas(this,ScreensManager.PANTALLAS.N1,3);
+		//myScreen = myScreenManager.getPantallas(this,ScreensManager.PANTALLAS.N1,1);
 		this.setScreen(myScreen);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SettingsManager.SCREEN_WIDTH, SettingsManager.SCREEN_HEIGHT);
@@ -49,6 +49,7 @@ public class MyGdxGame extends Game {
 
 	@Override
 	public void dispose () {
+		super.dispose();
 		batch.dispose();
 	}
 

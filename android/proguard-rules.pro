@@ -23,6 +23,21 @@
 
 -dontwarn com.badlogic.gdx.backends.android.AndroidFragmentApplication
 
+-keep class com.badlogic.**{
+**[] $VALUES;
+*;
+}
+
+-keep class com.badlogic.gdx.scenes.scene2d.ui.**{
+**[] $VALUES;
+ *;
+}
+
+-keep class com.mygdx.pacojuegos.sprites.interfaz.uiskin**{
+**[] $VALUES;
+ *;
+}
+
 # Required if using Gdx-Controllers extension
 -keep class com.badlogic.gdx.controllers.android.AndroidControllers
 

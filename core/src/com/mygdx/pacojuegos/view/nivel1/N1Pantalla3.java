@@ -5,10 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.pacojuegos.manager.AssetsManager;
+import com.mygdx.pacojuegos.manager.ScreensManager;
 import com.mygdx.pacojuegos.manager.SettingsManager;
 import com.mygdx.pacojuegos.model.Fondo;
 import com.mygdx.pacojuegos.model.Fruits;
@@ -21,7 +25,6 @@ public class N1Pantalla3 implements Screen {
 
     private Stage stage;
     private Game game;
-    private float velocidadOriginalJovani;
     private byte numeroMango = 1;
     private byte numeroManzana = 1;
     private boolean reproduciendoMotora = false;
@@ -45,30 +48,36 @@ public class N1Pantalla3 implements Screen {
     private Fondo fondo;
     private boolean sonidoEnReproduccion;
     private PanelNumerico panel;
-
+    private int tiempoRestante;
     public static final ArrayList<Fruits> fallingFruits = new ArrayList<>();
     public static final ArrayList<Fruits> reserveFruits = new ArrayList<>();
     private ArrayList<Fruits> fruitsToRemove = new ArrayList<>();
+    private Timer.Task cuentaAtrasTask;
+    private BitmapFont fuenteContador;
+    private Integer repetido;
+    private boolean dificil;
 
 
-    public N1Pantalla3(Game aGame) {
+    public N1Pantalla3(Game aGame, boolean dificil) {
 
         game = aGame;
         stage = new Stage(new ScreenViewport());
+        this.dificil = dificil;
 
         fondo = new Fondo(stage, AssetsManager.FONDO_INICIO);
         stage.addActor(fondo);
 
-        panel = new PanelNumerico(SettingsManager.SCREEN_WIDTH - SettingsManager.JOVANI_WIDTH * 2, SettingsManager.SCREEN_HEIGHT - SettingsManager.JOVANI_HEIGHT, 80,game);
+        panel = new PanelNumerico(SettingsManager.SCREEN_WIDTH - SettingsManager.JOVANI_WIDTH * 2, SettingsManager.SCREEN_HEIGHT - SettingsManager.JOVANI_HEIGHT, 40, game);
         panel.setData(0);
+
+        fuenteContador = new BitmapFont(Gdx.files.internal(AssetsManager.SKIN_TEXTO));
+        fuenteContador.getData().setScale(3);
 
         fruits = new Fruits();
         fallingFruits.add(fruits);
 
         jovani = new Jovani(stage);
         stage.addActor(jovani);
-
-        velocidadOriginalJovani = jovani.getVelX();
 
         batch = new SpriteBatch();
 
@@ -85,6 +94,12 @@ public class N1Pantalla3 implements Screen {
         lagarto1 = Gdx.audio.newMusic(Gdx.files.internal(AssetsManager.CHOCA_LAGARTO1));
         lagarto2 = Gdx.audio.newMusic(Gdx.files.internal(AssetsManager.CHOCA_LAGARTO2));
         motora = Gdx.audio.newMusic(Gdx.files.internal(AssetsManager.JOVANI_FINAL));
+
+        if (dificil) {
+            iniciarCuentaAtras(15);
+        } else {
+            iniciarCuentaAtras(30);
+        }
     }
 
 
@@ -126,6 +141,20 @@ public class N1Pantalla3 implements Screen {
             fruits.falling();
         }
 
+        if (dificil) {
+            for (Fruits frutas : fallingFruits) {
+                frutas.setVelY(-8f);
+            }
+        }
+
+        batch.begin();
+        String tiempoTexto = "Tiempo restante: " + tiempoRestante;
+        GlyphLayout layout = new GlyphLayout(fuenteContador, tiempoTexto);
+
+        float tiempoX = SettingsManager.JOVANI_WIDTH;
+        float tiempoY = panel.getfPosY() + (panel.getfAncho() + layout.height) / 2;
+        fuenteContador.draw(batch, layout, tiempoX, tiempoY);
+        batch.end();
     }
 
     public void colisonSonidos(Fruits fruit) {
@@ -216,6 +245,46 @@ public class N1Pantalla3 implements Screen {
                 sonidoEnReproduccion = true;
             }
 
+        }
+    }
+
+    public void iniciarCuentaAtras(int tiempoInicial) {
+        tiempoRestante = tiempoInicial;
+        cuentaAtrasTask = Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                tiempoRestante--;
+                if (tiempoRestante < 0) {
+                    tiempoRestante = 0;
+                    game.setScreen(ScreensManager.getSingleton().getScreen(game, ScreensManager.SCREENS.INICIO));
+                    reset();
+                }
+            }
+        }, 1f, 1f);
+    }
+
+    public void reset() {
+        reproduciendoMotora = false;
+        panel.setData(0);
+        fallingFruits.clear();
+        reserveFruits.clear();
+        fruitsToRemove.clear();
+        jovani.reset();
+        sonidoEnReproduccion = false;
+        frutaSound = null;
+        mango1.stop();
+        mango2.stop();
+        manzana1.stop();
+        manzana2.stop();
+        huevo.stop();
+        naranja1.stop();
+        naranja2.stop();
+        naranja3.stop();
+        lagarto1.stop();
+        lagarto2.stop();
+        motora.stop();
+        if (cuentaAtrasTask != null) {
+            cuentaAtrasTask.cancel();
         }
     }
 

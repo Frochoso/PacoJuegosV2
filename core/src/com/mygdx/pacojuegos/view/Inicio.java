@@ -25,7 +25,6 @@ public class Inicio implements Screen {
     private Game game;
 
     private TextureRegion textura;
-    private ScreensManager myScreenManager;
 
     private TextureRegion paco;
 
@@ -64,7 +63,8 @@ public class Inicio implements Screen {
         botonInicio.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(ScreensManager.getSingleton().getPantallas(game,ScreensManager.PANTALLAS.N1,1));
+                game.setScreen(ScreensManager.getSingleton().getPantallas(game,ScreensManager.PANTALLAS.N1));
+
             }
 
             @Override

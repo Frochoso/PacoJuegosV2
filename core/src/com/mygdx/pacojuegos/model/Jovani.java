@@ -97,6 +97,11 @@ public class Jovani extends Actor {
         }
     }
 
+    public void reset() {
+        setX(SettingsManager.SCREEN_WIDTH/2);
+        setVelX(0);
+    }
+
     public float getVelX(){
         return velX;
     }

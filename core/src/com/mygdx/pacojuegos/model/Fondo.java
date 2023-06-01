@@ -28,7 +28,7 @@ public class Fondo extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(fondoTexture, 0, this.getY(), SettingsManager.SCREEN_WIDTH, SettingsManager.SCREEN_HEIGHT);
+        batch.draw(fondoTexture, this.getX(), this.getY(), SettingsManager.SCREEN_WIDTH, SettingsManager.SCREEN_HEIGHT);
     }
 
     @Override
@@ -37,8 +37,9 @@ public class Fondo extends Actor {
     }
 
     public void dispose() {
-        if (this != null) {
-            this.dispose();
+        if (fondoTexture != null) {
+            fondoTexture.dispose();
+            fondoTexture = null;
         }
     }
 

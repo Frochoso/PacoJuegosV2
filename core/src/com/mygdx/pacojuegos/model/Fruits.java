@@ -47,6 +47,10 @@ public class Fruits {
         this.altoDiv4 = SettingsManager.FRUITS_HEIGHT / 4.0f;
     }
 
+    public void setVelY(float velY){
+        this.velY=velY;
+    }
+
     public void moverse() {
         posX += velX;
         posY += velY;
@@ -115,12 +119,13 @@ public class Fruits {
 
     public boolean colisiona(Jovani otro) {
 
-        boolean resultado, colisionX, colisionY;
+        boolean resultado=false, colisionX, colisionY;
 
-        colisionX = (Math.abs(posX - otro.getX()) <= (anchoDiv4 + SettingsManager.JOVANI_WIDTH / 2));
-        colisionY = (Math.abs(posY - otro.getY()) <= (altoDiv4 + SettingsManager.JOVANI_HEIGHT / 2));
-        resultado = colisionX && colisionY;
-
+        if (posY >= otro.getY() + otro.getHeight()) {
+            colisionX = (Math.abs(posX - otro.getX()) <= (anchoDiv4 + SettingsManager.JOVANI_WIDTH / 1.5));
+            colisionY = (Math.abs(posY - otro.getY()) <= (altoDiv4 + SettingsManager.JOVANI_HEIGHT / 1.2));
+            resultado = colisionX && colisionY;
+        }
         return resultado;
     }
 
