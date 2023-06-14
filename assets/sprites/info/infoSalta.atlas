@@ -1,0 +1,19 @@
+
+infoSalta.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+cartelSalta
+  rotate: false
+  xy: 1, 1
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: -1
+cartelSalta
+  rotate: false
+  xy: 241, 1
+  size: 238, 120
+  orig: 238, 120
+  offset: 0, 0
+  index: -1

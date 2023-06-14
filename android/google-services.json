@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "289132655177",
+    "project_id": "pacogames-2f23f",
+    "storage_bucket": "pacogames-2f23f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289132655177:android:594a340f186e0c9fb44598",
+        "android_client_info": {
+          "package_name": "com.mygdx.pacojuegos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289132655177-cmbh1qjv14s547aa7heng01o2n36f2gs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAagIX37ZNWU-JyhLHl6cD57zrJpDQa-aE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289132655177-cmbh1qjv14s547aa7heng01o2n36f2gs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

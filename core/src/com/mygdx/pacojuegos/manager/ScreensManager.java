@@ -3,16 +3,24 @@ package com.mygdx.pacojuegos.manager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.mygdx.pacojuegos.view.HistoriaFin;
+import com.mygdx.pacojuegos.view.HistoriaInicio;
 import com.mygdx.pacojuegos.view.Inicio;
-import com.mygdx.pacojuegos.view.nivel1.N1Pantalla1;
-import com.mygdx.pacojuegos.view.nivel1.N1Pantalla2;
-import com.mygdx.pacojuegos.view.nivel1.N1Pantalla3;
+import com.mygdx.pacojuegos.view.Pantalla1;
+import com.mygdx.pacojuegos.view.Pantalla2;
+import com.mygdx.pacojuegos.view.Pantalla3;
+import com.mygdx.pacojuegos.view.TransicionMuerte;
+import com.mygdx.pacojuegos.view.TransitionScreen;
+
+import java.util.ArrayList;
 
 public class ScreensManager extends ScreenAdapter {
 
     private static ScreensManager singleton;
-    private Integer[] pantallas=new Integer[6];
-    private Game game;
+    public static ArrayList<Screen> pantallas = new ArrayList<>();
+    private Game aGame;
+    static byte random;
+    private TransitionScreen transicion;
 
     public static ScreensManager getSingleton() {
         if (singleton == null) {
@@ -21,12 +29,32 @@ public class ScreensManager extends ScreenAdapter {
         return singleton;
     }
 
-    public enum SCREENS {
-        INICIO, NIVELES, CONFIGURACION;
+    public void initialize(Game game) {
+        this.aGame = game;
     }
 
-    public enum PANTALLAS {
-        N1
+    public void initializeScreens() {
+        Screen p1Facil = new Pantalla1(aGame, false);
+        Screen p2Facil = new Pantalla2(aGame, false);
+        Screen p3Facil = new Pantalla3(aGame, false);
+        Screen p1Dificil = new Pantalla1(aGame, true);
+        Screen p2Dificil = new Pantalla2(aGame, true);
+        Screen p3Dificil = new Pantalla3(aGame, true);
+
+        pantallas.add(p1Facil);
+        pantallas.add(p2Facil);
+        pantallas.add(p3Facil);
+        pantallas.add(p1Dificil);
+        pantallas.add(p2Dificil);
+        pantallas.add(p3Dificil);
+    }
+
+    public void vaciaPantallas(){
+        pantallas.clear();
+    }
+
+    public enum SCREENS {
+        INICIO, HISTORIA, FIN;
     }
 
     public Screen getScreen(Game game, SCREENS screenToGet) {
@@ -35,91 +63,49 @@ public class ScreensManager extends ScreenAdapter {
             case INICIO:
                 newScreen = new Inicio(game);
                 break;
+            case HISTORIA:
+                    newScreen=new HistoriaInicio(game);
+                    break;
+            case FIN:
+                newScreen=new HistoriaFin(game);
+                break;
         }
         return newScreen;
     }
 
-    public Screen getPantallas(Game game, ScreensManager.PANTALLAS screenToGet) {
-        byte random;
-        for (int i = 0; i < pantallas.length; i++) {
-            pantallas[i] = 0;
+    public Screen transiciones(Game game, String previa) {
+        Screen pantallaSiguiente = null;
+        random = (byte) (Math.random() * pantallas.size());
+        String fondo = AssetsManager.FONDO_INICIO;
+        if (!pantallas.isEmpty()) {
+            pantallaSiguiente = pantallas.get(random);
+            if (pantallaSiguiente instanceof PantallaBase) {
+                fondo = ((PantallaBase) pantallaSiguiente).getFondo();
+            }
+        } else {
+            fondo = AssetsManager.FONDO_NEGRO;
         }
+
+        return new TransitionScreen(game, previa, fondo);
+    }
+
+    public Screen transicionesMuerte(Game game, String previa) {
+        String fondo = AssetsManager.FONDO_INICIO;
+
+        return new TransicionMuerte(game, previa, fondo);
+    }
+
+    public Screen getPantallas(Game game) {
+
         Screen newScreen = null;
-        switch (screenToGet) {
-            case N1:
-                int repeticiones = 0;
-                boolean repetido = false;
-                int ultimaPantalla = -1;
+        if (pantallas.isEmpty()) {
+            newScreen = new HistoriaFin(game);
 
-                do {
-                    random = (byte) (Math.random() * 6);
-                    switch (random) {
-                        case 0:
-                            newScreen = new N1Pantalla1(game, false);
-                            pantallas[0] = repeticiones++;
-                            break;
-                        case 1:
-                            newScreen = new N1Pantalla2(game, false);
-                            pantallas[1] = repeticiones++;
-                            break;
-                        case 2:
-                            newScreen = new N1Pantalla3(game, false);
-                            pantallas[2] = repeticiones++;
-                            break;
-                        case 3:
-                            newScreen = new N1Pantalla1(game, true);
-                            pantallas[3] = repeticiones++;
-                            break;
-                        case 4:
-                            newScreen = new N1Pantalla2(game, true);
-                            pantallas[4] = repeticiones++;
-                            break;
-                        case 5:
-                            newScreen = new N1Pantalla3(game, true);
-                            pantallas[5] = repeticiones++;
-                            break;
-                    }
-
-                    for (int i = 0; i < pantallas.length; i++) {
-                        if (pantallas[i] != null && pantallas[i] > 1) {
-                            repetido = true;
-                            break;
-                        } else {
-                            repetido = false;
-                            ultimaPantalla = random;
-                        }
-                    }
-                } while (repetido);
-
-                if (ultimaPantalla != -1) {
-                    switch (ultimaPantalla) {
-                        case 0:
-                            newScreen = new N1Pantalla1(game, false);
-                            break;
-                        case 1:
-                            newScreen = new N1Pantalla2(game, false);
-                            break;
-                        case 2:
-                            newScreen = new N1Pantalla3(game, false);
-                            break;
-                        case 3:
-                            newScreen = new N1Pantalla1(game, true);
-                            break;
-                        case 4:
-                            newScreen = new N1Pantalla2(game, true);
-                            break;
-                        case 5:
-                            newScreen = new N1Pantalla3(game, true);
-                            break;
-                    }
-                } else {
-                    newScreen = new Inicio(game);
-                }
+        } else {
+            newScreen = pantallas.get(random);
+            pantallas.remove(random);
         }
 
         return newScreen;
     }
-
-
-
 }

@@ -13,42 +13,74 @@ import com.mygdx.pacojuegos.manager.AssetsManager;
 import com.mygdx.pacojuegos.manager.GameManager;
 import com.mygdx.pacojuegos.manager.SettingsManager;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Coches extends Actor {
 
     private Game game;
     private Stage stage;
     private Animation<TextureRegion> skin;
-    private String[] animaciones={AssetsManager.COCHE1_ATLAS,AssetsManager.COCHE2_ATLAS,AssetsManager.COCHE3_ATLAS};
-    private String[] fichero={AssetsManager.COCHE1,AssetsManager.COCHE2,AssetsManager.COCHE3};
+    private String[] animaciones = {AssetsManager.COCHE1_ATLAS, AssetsManager.COCHE2_ATLAS, AssetsManager.COCHE3_ATLAS};
+    private String[] fichero = {AssetsManager.COCHE1, AssetsManager.COCHE2, AssetsManager.COCHE3};
     private float speed;
     private float speedTarget;
     private float acelX;
-    private byte random;
-    public Coches(Stage stage,Integer indice,float posY,byte random){
-        this.stage=stage;
-        this.random=random;
+    private final byte random;
+    private boolean dificil;
+    private boolean pantallaAparecida;
+    private boolean touch = false;
+
+    public Coches(Stage stage, Integer indice, float posX, float posY, byte random) {
+        this.stage = stage;
+        this.random = random;
+        this.dificil = dificil;
+
         acelX = 0.225f;
-        setBounds(100,posY, SettingsManager.COCHE_WIDTH,SettingsManager.COCHE_WIDTH);
+        setBounds(posX, posY, SettingsManager.COCHE_WIDTH, SettingsManager.COCHE_WIDTH);
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(animaciones[indice]));
         skin = new Animation<TextureRegion>(0.02f, atlas.findRegions(fichero[indice]), Animation.PlayMode.LOOP);
     }
 
-    public void defineCoche(float delta ){
-        if(this.random==1) {
-            speedTarget = 200f;
-        }else if(this.random==2){
-            speedTarget = 220f;
-        }else if(this.random==3){
-            speedTarget = 230f;
-        }
+    public void defineCoche(final float delta, final boolean dificil) {
 
-        speedTarget += acelX;
+            touch = true;
+            if (!dificil) {
+                if (random == 1) {
+                    speedTarget = 200f;
+                } else if (random == 2) {
+                    speedTarget = 220f;
+                } else if (random == 3) {
+                    speedTarget = 230f;
+                }
+            } else {
+                if (random == 1) {
+                    speedTarget = 230f;
+                } else if (random == 2) {
+                    speedTarget = 270f;
+                } else if (random == 3) {
+                    speedTarget = 300f;
+                }
+            }
 
-        float aceleracion = 500f;
-        speed = MathUtils.clamp(speed + aceleracion * delta, 0, speedTarget);
-        this.setX(this.getX() + speed * delta);
+            speedTarget += acelX;
+
+            float aceleracion = 100f;
+            speed = MathUtils.clamp(speed + aceleracion * delta, 0, speedTarget);
+            setX(getX() + speed * delta);
+
     }
 
+    public boolean isTouchable() {
+        return touch;
+    }
+
+    public void reset() {
+        speed = 0;
+        speedTarget = 0;
+        acelX = 0;
+        this.setX(100);
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

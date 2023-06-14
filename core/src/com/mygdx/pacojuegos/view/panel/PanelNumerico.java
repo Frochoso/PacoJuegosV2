@@ -4,8 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.pacojuegos.manager.AssetsManager;
+import com.mygdx.pacojuegos.repository.DataUploader;
 
 import java.util.ArrayList;
 
@@ -16,37 +16,21 @@ public class PanelNumerico {
     protected float fPosX;
     protected float fPosY;
     protected float fAncho;
-    private final Game game;
     private int iValorAlmacenado;
+    private static DataUploader puntuaciones;
 
-    private Stage stage;
-
-    public PanelNumerico(float pX, float pY, float nAncho, Game game) {
-        this.fPosX = pX;
-        this.fPosY = pY;
-        this.fAncho = nAncho;
-        this.game = game;
-        this.stage=stage;
+    public PanelNumerico() {
 
         listaDigitos = new ArrayList<BitmapFont>();
         for (int i = 0; i < 10; i++) {
             BitmapFont nuevoDigito = new BitmapFont(Gdx.files.internal(AssetsManager.SKIN_TEXTO));
-            nuevoDigito.getData().setScale(2);
+            nuevoDigito.getData().setScale(3);
             listaDigitos.add(nuevoDigito);
         }
+
         listaMostrada = new ArrayList<BitmapFont>();
         listaMostrada.add(listaDigitos.get(0));
         iValorAlmacenado = 0;
-    }
-
-    public float getfPosY(){
-        return fPosY;
-    }
-    public float getfPosX(){
-        return fPosX;
-    }
-    public float getfAncho(){
-        return fAncho;
     }
 
     public void pintarse(SpriteBatch batch) {
@@ -58,7 +42,6 @@ public class PanelNumerico {
             digito.draw(batch, digitoTexto, pX, pY);
             pX += fAncho;
         }
-
         batch.end();
     }
 
@@ -88,24 +71,32 @@ public class PanelNumerico {
     }
 
     public void resta(int iValor) {
-        if (iValorAlmacenado - iValor >= 0||iValorAlmacenado - iValor <= 0) {
-            iValorAlmacenado -= iValor;
-            listaMostrada.clear();
-            String sNumero = String.valueOf(iValorAlmacenado);
-            for (int i = 0; i < sNumero.length(); i++) {
-                char c = sNumero.charAt(i);
-                if (c != '-') {
-                    int digito = Integer.parseInt(String.valueOf(c));
-                    listaMostrada.add(listaDigitos.get(digito));
-                }
+        int nuevoValor = iValorAlmacenado - iValor;
+        if (nuevoValor >= 0) {
+            iValorAlmacenado = nuevoValor;
+        } else {
+            iValorAlmacenado = 0;
+        }
+        listaMostrada.clear();
+        String sNumero = String.valueOf(iValorAlmacenado);
+        for (int i = 0; i < sNumero.length(); i++) {
+            char c = sNumero.charAt(i);
+            if (c != '-') {
+                int digito = Integer.parseInt(String.valueOf(c));
+                listaMostrada.add(listaDigitos.get(digito));
             }
         }
     }
 
+    public int getiValorAlmacenado() {
+        return iValorAlmacenado;
+    }
 
+    public static void pasarPuntuacion(int puntuacion) {
+        puntuaciones.sumaPuntuacion(puntuacion);
+    }
 
     public void dispose() {
-        // Libera los recursos de las fuentes
         for (BitmapFont font : listaDigitos) {
             font.dispose();
         }

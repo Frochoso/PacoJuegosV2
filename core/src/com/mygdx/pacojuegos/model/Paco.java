@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.pacojuegos.manager.AssetsManager;
 import com.mygdx.pacojuegos.manager.GameManager;
 import com.mygdx.pacojuegos.manager.SettingsManager;
+import com.mygdx.pacojuegos.repository.DataUploader;
 
 public class Paco extends Actor {
 
@@ -24,38 +25,60 @@ public class Paco extends Actor {
     private boolean touchingScreen = false;
     private boolean muerto;
     private boolean meta;
+    private float aceleracion;
+    private float deceleracion;
+    private int puntos;
+    private int contadorToques;
+    private DataUploader puntuaciones;
 
 
     public Paco(Stage stage) {
         super();
         this.stage = stage;
         speed = 200f;
+        this.puntos = 0;
         acelX = 0.225f;
         hitbox = null;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(AssetsManager.PACO_RUNNING_ATLAS_FILE));
         skin = new Animation<TextureRegion>(0.25f, atlas.findRegions(AssetsManager.PACO_RUNNING), Animation.PlayMode.LOOP);
         setBounds(100, 200, SettingsManager.PACO_WIDTH, SettingsManager.PACO_HEIGHT);
-
     }
 
     public void act(float delta) {
         super.act(delta);
-        if (Gdx.input.justTouched()&&!meta) {
+
+        if (Gdx.input.justTouched() && !meta) {
+            contadorToques++;
+            puntos = puntos + 5;
             touchingScreen = true;
             speedTarget = 1000f;
             speedTarget += acelX;
         }
         if (touchingScreen) {
-            float aceleracion = 700f;
+            aceleracion = 700f;
             speed = MathUtils.clamp(speed + aceleracion * delta, 0, speedTarget);
         } else {
-            float deceleracion = 20f;
+            deceleracion = 20f;
             speed = MathUtils.clamp(speed - deceleracion * delta, 0, speedTarget);
         }
         this.setX(this.getX() + speed * delta);
 
-
         touchingScreen = false;
+    }
+
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public int getContadorToques() {
+        return contadorToques;
+    }
+
+    public void pasarPuntos(int puntos, int toques) {
+
+        double mediaPuntos = puntos / toques;
+
+        puntuaciones.sumaPuntuacionN2(mediaPuntos);
     }
 
     public boolean calculateCollisions(Rectangle meta) {
@@ -68,6 +91,15 @@ public class Paco extends Actor {
             }
         }
         return result;
+    }
+
+    public void reset() {
+        puntos = 0;
+        aceleracion = 0f;
+        speed = 0;
+        speedTarget = 0;
+        deceleracion = 0f;
+        this.setX(100);
     }
 
     public boolean isMuerto() {

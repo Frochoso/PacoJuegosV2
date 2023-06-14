@@ -26,8 +26,8 @@ public class Jovani extends Actor {
     protected float altoDiv2;
     private Rectangle hitbox;
     private boolean isMoving = false;
-    private  float aceleracion = 150f;
     private Stage stage;
+    private boolean direccion;
 
     public Jovani(Stage stage) {
 
@@ -36,19 +36,15 @@ public class Jovani extends Actor {
         this.altoDiv2 = SettingsManager.JOVANI_HEIGHT / 2.0f;
         this.posX = (Gdx.graphics.getWidth() / 2f) - anchoDiv2;
         hitbox = null;
-        this.velX=0f;
-        this.setPosition(SettingsManager.SCREEN_WIDTH / 2f, 30);
+        this.velX = 0f;
+        this.setPosition(SettingsManager.SCREEN_WIDTH / 2f, 170);
         atlasDcha = new TextureAtlas(Gdx.files.internal(AssetsManager.JOVANI_DCHA_ATLAS));
         atlasIzqda = new TextureAtlas(Gdx.files.internal(AssetsManager.JOVANI_IZQDA_ATLAS));
-        animacionDcha=new Animation<TextureRegion>(0.25f, atlasDcha.findRegions(AssetsManager.JOVANI_DCHA), Animation.PlayMode.LOOP);
+        animacionDcha = new Animation<TextureRegion>(0.25f, atlasDcha.findRegions(AssetsManager.JOVANI_DCHA), Animation.PlayMode.LOOP);
         animacionIzqda = new Animation<TextureRegion>(0.25f, atlasIzqda.findRegions(AssetsManager.JOVANI_IZQDA), Animation.PlayMode.LOOP);
-        skin=animacionDcha;
+        skin = animacionDcha;
         this.anchoDiv2 = SettingsManager.JOVANI_WIDTH / 2.0f;
         this.altoDiv2 = SettingsManager.JOVANI_HEIGHT / 2.0f;
-    }
-
-    public Rectangle getHitBox() {
-        return hitbox;
     }
 
     public void calculateBodyRectangle() {
@@ -60,25 +56,26 @@ public class Jovani extends Actor {
         super.draw(batch, parentAlpha);
         TextureRegion currentFrame = skin.getKeyFrame(GameManager.getSingleton().getGameTime(), true);
         batch.draw(currentFrame, this.getX(), this.getY(), SettingsManager.JOVANI_WIDTH, SettingsManager.JOVANI_HEIGHT);
+    }
 
+    public void setDireccion(boolean direccion) {
+        this.direccion = direccion;
     }
 
     public void act(float delta) {
         calculateBodyRectangle();
-        int pixelX = Gdx.input.getX();
-        float pantallaDivididaEntre2 = Gdx.graphics.getWidth() / 2f;
 
-        if (Gdx.input.justTouched() && !isMoving) {
+        if (!isMoving) {
             isMoving = true;
         }
 
         if (isMoving) {
             float targetVelX = 0;
 
-            if (pixelX > pantallaDivididaEntre2) {
+            if (direccion) {
                 setAnimacion(animacionDcha);
                 targetVelX = 300f;
-            } else if (pixelX < pantallaDivididaEntre2) {
+            } else if (!direccion) {
                 setAnimacion(animacionIzqda);
                 targetVelX = -300f;
             }
@@ -89,25 +86,25 @@ public class Jovani extends Actor {
 
             this.setX(this.getX() + velX * delta);
 
-            if (this.getX() <= 0 ) {
+            if (this.getX() <= 0) {
                 this.setX(0);
-            } else if( this.getX() >= SettingsManager.SCREEN_WIDTH - SettingsManager.JOVANI_WIDTH){
+            } else if (this.getX() >= SettingsManager.SCREEN_WIDTH - SettingsManager.JOVANI_WIDTH) {
                 this.setX(SettingsManager.SCREEN_WIDTH - SettingsManager.JOVANI_WIDTH);
             }
         }
     }
 
     public void reset() {
-        setX(SettingsManager.SCREEN_WIDTH/2);
+        setX(SettingsManager.SCREEN_WIDTH / 2);
         setVelX(0);
     }
 
-    public float getVelX(){
+    public float getVelX() {
         return velX;
     }
 
-    public void setAnimacion(Animation<TextureRegion> current){
-        this.skin=current;
+    public void setAnimacion(Animation<TextureRegion> current) {
+        this.skin = current;
     }
 
     public void setVelX(float velX) {
